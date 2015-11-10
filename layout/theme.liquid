@@ -1,0 +1,243 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="ie9 no-js"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+
+  <!-- Basic page needs ================================================== -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <!-- favicon =========================================================== -->
+  <link rel="shortcut icon" href="{{ 'favicon.ico' | asset_url }}" type="image/x-icon" />
+
+
+  <!-- Title and description ================================================== -->
+  <title>
+  {{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>
+
+  {% if page_description %}
+  <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <!-- Product meta ================================================== -->
+  {% include 'open-graph-tags' %}
+  {% include 'twitter-card' %}
+
+  <!-- Helpers ================================================== -->
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+
+  <!-- CSS ================================================== -->
+  {% if template contains 'index' or template contains 'product' %}
+    {{ 'owl.carousel.min.css' | asset_url | stylesheet_tag }}
+  {% endif %}
+  {{ 'timber.scss.css' | asset_url | stylesheet_tag }}
+  {{ 'bootstrap.min.css' | asset_url | stylesheet_tag }}
+  {{ 'navbar.css' | asset_url | stylesheet_tag }}
+  {{ 'footer.css' | asset_url | stylesheet_tag }}
+  {{ 'shopify_custom.css' | asset_url | stylesheet_tag }}
+
+  {% if settings.cart_type == 'drawer' %}
+  <!-- Ajaxify Cart Plugin ================================================== -->
+  {{ 'ajaxify.scss.css' | asset_url | stylesheet_tag }}
+  {% endif %}
+
+  <!-- Header hook for plugins ================================================== -->
+  {{ content_for_header }}
+
+  {% include 'oldIE-js' %}
+
+  {% comment %}
+    If you store has customers disabled, you can remove the following JS file
+  {% endcomment %}
+  {% if template contains 'customers' %}
+    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+    {{ 'customer_area.js'  | shopify_asset_url | script_tag }}
+  {% endif %}
+
+  {% comment %}
+    Theme dependent JS is loaded at the very bottom of this file for performance reasons.
+    However, jQuery is included here so that it can be used inside the templates, e.g. in product.liquid.
+  {% endcomment %}
+  {{ '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js' | script_tag }}
+  {{ 'modernizr.min.js' | asset_url | script_tag }}
+  {% if template contains 'index' or template contains 'product' %}
+    {{ 'owl.carousel.min.js' | asset_url | script_tag }}
+  {% endif %}
+
+  <!-- Custom Lato Font ======================================= -->
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
+</head>
+
+{% comment %}
+  Add the page template as a class for easy page or template specific styling.
+{% endcomment %}
+<body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}{% if settings.home_section_1 == 'slider' and template == 'index' %}attached-slider {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}" >
+
+
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    {% include 'site-nav' %}
+  </nav>
+  <hr class="visible--small hr--header">
+  <header class="site-header" role="banner">
+      <div class="wrapper">
+        <div class="grid--full">
+          <div class="grid-item one-quarter small--hide header-cart-wrapper">
+            {% comment %}
+              Show number of items in the cart and total cost in the /cart link
+
+              Ajaxify Cart Notes:
+                - #cartToggle toggles cart visibility (drawer or modal)
+                - #cartCount updates the total number of items in the cart
+                - #cartCost updates the total cost of the cart
+                - Documentation:  https://shopify.github.io/Timber/#ajax-cart
+            {% endcomment %}
+          </div>
+        </div>
+      </div>
+  </header>
+
+
+  <main class="wrapper main-content" role="main">
+
+    {{ content_for_layout }}
+
+  </main>
+
+  {% assign index = 0 %}
+
+   {% if settings.footer_quicklinks_enable %}{% assign index = index | plus: 1 %}{% endif %}
+   {% if settings.footer_social_enable %}{% assign index = index | plus: 1 %}{% endif %}
+   {% if settings.footer_custom_enable %}{% assign index = index | plus: 1 %}{% endif %}
+   {% if settings.footer_newsletter_enable %}{% assign index = index | plus: 1 %}{% endif %}
+
+  {% case index %}
+    {% when 1 %}
+      {% assign footer_item_width = 'medium--one-half large--one-half push--medium--one-quarter push--large--one-quarter text-center' %}
+    {% when 2 %}
+      {% assign footer_item_width = 'medium--one-half large--one-third push--large--one-sixth' %}
+    {% when 3 %}
+      {% assign footer_item_width = 'medium--one-third large--one-quarter push--large--one-eighth' %}
+    {% when 4 %}
+      {% assign footer_item_width = 'medium--one-half large--one-quarter' %}
+  {% endcase %}
+
+  <footer class="site-footer text-center" role="contentinfo">
+    {% include 'footer' %}
+  </footer>
+
+        <!-- mailing list modal -->
+        <div class="modal fade" id="mailingListModal" tabindex="-1" role="dialog" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-body">
+                        <!-- Mailchimp embedded mailing list form -->
+                        <div id="mc_embed_signup">
+                            <!-- Begin MailChimp Signup Form -->
+                            <link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css">
+                            <style type="text/css">
+                                #mc_embed_signup{background:#fff; clear:left; font:14px Lato,sans-serif; }
+                                /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
+                                   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
+                            </style>
+                            <div id="mc_embed_signup">
+                            <form action="//wearhaus.us8.list-manage.com/subscribe/post?u=cb896efdc02672d15109af76b&amp;id=6a705d143f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                               <div id="mc_embed_signup_scroll">
+                                <h2>SUBSCRIBE TO OUR MAILING LIST</h2>
+                            <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
+                            <div class="mc-field-group">
+                                <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
+                            </label>
+                                <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+                            </div>
+                            <div class="mc-field-group">
+                                <label for="mce-FNAME">First Name </label>
+                                <input type="text" value="" name="FNAME" class="" id="mce-FNAME">
+                            </div>
+                            <div class="mc-field-group">
+                                <label for="mce-LNAME">Last Name </label>
+                                <input type="text" value="" name="LNAME" class="" id="mce-LNAME">
+                            </div>
+                                <div id="mce-responses" class="clear">
+                                    <div class="response" id="mce-error-response" style="display:none"></div>
+                                    <div class="response" id="mce-success-response" style="display:none"></div>
+                                </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                               <div style="position: absolute; left: -5000px;"><input type="text" name="b_cb896efdc02672d15109af76b_6a705d143f" tabindex="-1" value=""></div>
+                               <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+                               </div>
+                            </form>
+                        </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+
+
+  {% comment %}
+    Google Analytics for Wearhaus Shopify page
+  {% endcomment %}
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-65217708-1', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+
+
+  {% comment %}
+    An (almost) empty JS file for you to place your code
+  {% endcomment %}
+  {{ 'shop.js' | asset_url | script_tag }}
+  {{ 'bootstrap.min.js' | asset_url | script_tag }}
+
+  {% comment %}
+    <!-- Wearhaus Zendesk Widget script -->
+    <script>
+        /*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(c){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var o=this.createElement("script");n&&(this.domain=n),o.id="js-iframe-async",o.src=e,this.t=+new Date,this.zendeskHost=t,this.zEQueue=a,this.body.appendChild(o)},o.write('<body onload="document._l();">'),o.close()}("https://assets.zendesk.com/embeddable_framework/main.js","wearhaus.zendesk.com");/*]]>*/
+    </script>
+    <!-- End of wearhaus Zendesk Widget script -->
+    {% endcomment %}
+
+  {% comment %}
+    Ajaxify your cart with this plugin. Adding a product will reveal a drawer, modal, or confirmation button. Enabled by default in theme settings.
+
+    Ajaxify Cart Documentation:
+      - https://shopify.github.io/Timber/#ajax-cart
+  {% endcomment %}
+  {% if settings.cart_type == 'drawer' %}
+  {{ 'handlebars.min.js' | asset_url | script_tag }}
+  {% include 'ajax-cart-template' %}
+  {{ 'ajaxify.js' | asset_url | script_tag }}
+  <script>
+  jQuery(function($) {
+    ajaxifyShopify.init({
+      method: 'Drawer',
+      wrapperClass: 'wrapper',
+      formSelector: '#AddToCartForm',
+      addToCartSelector: '#addToCart',
+      cartCountSelector: '.cart-count',
+      cartCostSelector: '#cartCost',
+      toggleCartButton: '#cartToggle',
+      useCartTemplate: true, // When true, it'll use cart.liquid template. When false, it'll use ajax-cart-template.liquid.
+      btnClass: 'btn',
+      moneyFormat: {{ shop.money_format | json }},
+      enableQtySelectors: true,
+      prependDrawerTo: 'body',
+      onToggleCallback: timber.cartToggleCallback
+    });
+  });
+  </script>
+  {% endif %}
+</body>
+</html>

@@ -1,0 +1,161 @@
+{% comment %}
+
+  This is the homepage of your site.
+
+  More info on global variables (available on all templates):
+    - http://docs.shopify.com/themes/liquid-variables/global
+{% endcomment %}
+
+{% if settings.home_section_1 != blank %}
+  {% include settings.home_section_1 %}
+{% endif %}
+
+{% if settings.home_section_2 != blank %}
+  {% unless settings.home_section_1 == 'slider' %}
+    <hr>
+  {% endunless %}
+  {% include settings.home_section_2 %}
+{% endif %}
+
+{% if settings.home_section_3 != blank %}
+  <hr>
+  {% include settings.home_section_3 %}
+{% endif %}
+
+{% if settings.home_section_4 != blank %}
+  <hr>
+  {% include settings.home_section_4 %}
+{% endif %}
+
+<div id="color-picker">
+  <div id="color-picker-description">
+    <div>
+      <h1>CHOOSE YOUR COLORS</h1>
+      <p>Use this interactive tool to mix and match your favorite Arc color options.</p>
+    </div>
+      <table>
+        <tr>
+            <th style="background-color: #FF4D4D"></th>
+            <th style="background-color: #FFC04D"></th>
+            <th style="background-color: #FFFF4D"></th>
+        </tr>
+        <tr>
+            <td style="background-color: #4DA64D"></td>
+            <td style="background-color: #4D4DFF"></td>
+            <td style="background-color: #A64DA6"></td>
+        </tr>
+        <tr>
+            <td style="background-color: #FF4DFF"></td>
+            <td style="background-color: #FFD3DB"></td>
+            <td style="background-color: #00bccc"></td>
+        </tr>
+      </table>
+      <form action="">
+        <input type="radio" name="color" value="white" id="white" checked="checked">
+        <label for="white" id="radio-white">WHITE ARC
+        </label>
+        <input type="radio" name="color" value="black" id="black">
+        <label for="black" id="radio-black">BLACK ARC
+        </label>
+      </form>
+  </div>
+  <div id="color-picker-picture">
+      {{ 'colorpickerwhitearc.png' | asset_url | img_tag: 'White Arc', 'color-picker-picture-white-arc' }}
+      {{ 'colorpickerblackarc.png' | asset_url | img_tag: 'Black Arc', 'color-picker-picture-black-arc' }}
+      <div id="color-picker-colors">
+        {{ 'colorpickerred.png' | asset_url | img_tag: 'red light', 'color-picker-picture-red'}}
+        {{ 'colorpickerorange.png' | asset_url | img_tag: 'orange light', 'color-picker-picture-orange'}}
+        {{ 'colorpickeryellow.png' | asset_url | img_tag: 'yellow light', 'color-picker-picture-yellow'}}
+        {{ 'colorpickergreen.png' | asset_url | img_tag: 'green light', 'color-picker-picture-green'}}
+        {{ 'colorpickerblue.png' | asset_url | img_tag: 'blue light', 'color-picker-picture-blue'}}
+        {{ 'colorpickerpurple.png' | asset_url | img_tag: 'purple light', 'color-picker-picture-purple'}}
+        {{ 'colorpickermagenta.png' | asset_url | img_tag: 'magenta light', 'color-picker-picture-magenta'}}
+        {{ 'colorpickerpink.png' | asset_url | img_tag: 'pink light', 'color-picker-picture-pink'}}
+        {{ 'colorpickerteal.png' | asset_url | img_tag: 'teal light', 'color-picker-picture-teal'}}
+      </div>
+  </div>
+</div>
+
+<div class="wrapper main-content">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="description_section">
+        <div class="description_section_image">
+          {{ 'wireless-syncing.jpg' | asset_url | img_tag }}
+        </div>
+        <div class="description_section_text">
+          <div class="description_section_text_inner">
+            <h3>WIRELESS SYNCING</h3>
+            <p>The Arc is the world’s first pair of headphones that lets you wirelessly sync up with multiple friends and listen together. The days of splitting earbuds are over. Crystal clear, synchronized listening is just a touch away.</p>
+          </div>
+        </div>
+      </div>
+      <div class="description_section">
+        <div class="description_section_image">
+          {{ 'wired-listening.jpg' | asset_url | img_tag }}
+        </div>
+        <div class="description_section_text">
+          <div class="description_section_text_inner">
+            <h3>WIRED LISTENING</h3>
+            <p>Battery running low? Need to use headphones with your DJ setup? No sweat! The Arc comes with a gold-plated 3.5mm AUX cable that you can use to play sound from any wired audio source. The AUX cable comes with an inline microphone and a button for playback controls.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="description_section">
+        <div class="description_section_image">
+          {{ 'touch-controls.jpg' | asset_url | img_tag }}
+        </div>
+        <div class="description_section_text">
+          <div class="description_section_text_inner">
+            <h3>TOUCH CONTROLS</h3>
+            <p>No more fumbling with your phone to change a song -- the Arc uses capacitive touch controls on the right earcup. With just a swipe of a finger, you can skip between songs, adjust volume, change the color ring, broadcast your audio or join a station.</p>
+          </div>
+        </div>
+      </div>
+      <div class="description_section">
+        <div class="description_section_image">
+          {{ 'mobile-app.jpg' | asset_url | img_tag }}
+        </div>
+        <div class="description_section_text">
+          <div class="description_section_text_inner">
+            <h3>MOBILE APP</h3>
+            <p>The Wearhaus mobile app enhances the social experience by providing a list of stations users are hosting nearby.You can also chat within a station, add friends, star songs, fully customize the light ring and more. Available on <a href="https://play.google.com/store/apps/details?id=com.wearhaus.frontend&hl=en">Android</a> and <a href="https://itunes.apple.com/us/app/wearhaus/id977808951?mt=8">iOS</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12">
+        <div id="techspec_section">
+          <div id="techspec_section_text">
+            <div id="techspec_section_text_inner">
+              <h3>TECHNICAL SPECIFICATIONS</h3>
+              <strong>Perfectly Tuned Sound</strong>
+              <p>40mm neodymium dual diaphragm drivers</p>
+              <p>20 - 20kHz frequency response</p>
+              <p>108 dB @ kHz sensitivity</p>
+              <p>28.5 Ω impedance</p>
+              <p>Passive noise isolation</p><br>
+              <strong>Cutting Edge Bluetooth Technology</strong>
+              <p>Bluetooth 4.0 AptX codec</p> 
+              <p>30m maximum Bluetooth syncing range</p>
+              <p>Up to 16 hours of battery life (1200 kWH)</p><br>
+              <strong>Superior Design</strong>
+              <p>Anodized aluminum accents</p>
+              <p>Memory foam cushions</p>
+              <p>High quality faux leather</p><br>
+              <strong>Physical Measurements</strong>
+              <p>300g weight</p>
+              <p>7 x 7 inches collapsed, 8.25 x 7 inches fully extended</p>
+              
+            </div>
+          </div>
+          <div id="techspec_section_image">
+            {{ 'frequencychart.png' | asset_url | img_tag: 'frequency chart', 'techspec-frequency-diagram' }}
+            {{ 'collapsedextendedarcpic1.png' | asset_url | img_tag: 'collapsed extended arc pic', 'techspec-arc-diagram' }}
+          </div>
+        </div>
+    </div>
+  </div>
+</div>

@@ -1,5 +1,6 @@
 Wearhaus Shopify Theme
 ===
+Source for the Shopify Wearhaus theme.
 
 Installation
 ---

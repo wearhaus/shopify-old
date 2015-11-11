@@ -18,6 +18,8 @@ Usage
 ---
 Now that a git repo has been cloned to the themes folder, you may now make changes and commit them to this git repo.
 
-When making changes, Shopify Theme Editor will upload those changes to the dev shopify site.
+When making changes, Shopify Theme Editor will upload those changes to the dev Shopify site automatically.
+
+You may view your changes by clicking the settings icon and pressing __View Theme__
 
 When the theme is ready for productions, login to __wearhaus-inc__ Shopify with the Theme Editor and copy all the working to changes to the production theme directory `Wearhaus Site [main]`

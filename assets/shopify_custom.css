@@ -267,7 +267,7 @@ input.js--num {
 
 .rte img { /* customize what's in the box css */
 	height: auto;
-	width: 100%;
+	width: 85%;
 }
 
 .rte p {
@@ -469,7 +469,7 @@ input.js--num {
 
 #techspec_section {
 	background-color: #333;
-	height: 544px;
+	height: 564px;
 	margin-bottom: 15px;
 }
 

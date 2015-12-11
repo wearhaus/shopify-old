@@ -504,6 +504,16 @@ input.js--num {
 
 
 /* MEDIA QUERIES */
+@media (min-width: 1140px) { /* large tvs/screens */
+	.main-content {
+	    padding-left: 25%;
+	    padding-right: 25%;
+	}
+	.item-product-title {
+		padding: 5em 25%;
+	}
+}
+
 @media (max-width: 1024px) { /* ipad landscape */
 
 	#color-picker {
@@ -515,15 +525,17 @@ input.js--num {
 		padding-top: 40px;
 		width: 90%;
 	}
-
 }
 
 @media (max-width: 968px) {
 
 	.description_section_text {
 		height: 45%;
-		overflow: hidden;
 		width: 100%;
+	}
+
+	#product-section {
+		padding: 2em 0;
 	}
 
 	.description_section_text_inner, #techspec_section_text_inner {
@@ -601,7 +613,8 @@ input.js--num {
 	}
 
 	.wrapper .main-content {
-		margin-top: 10px;
+		margin-top: 0;
+	    padding: 40px 1em;
 	}
 
 	#color-picker {
@@ -746,11 +759,6 @@ input.js--num {
 
 	.techspec-arc-diagram, .techspec-frequency-diagram {
 		width: 100%;
-	}
-
-	.wrapper .main-content {
-		margin-top: 20px;
-		padding: 0;
 	}
 
 	#color-picker {

@@ -250,8 +250,6 @@ input.update-cart {
 .js-qty {
   position: relative;
   margin-bottom: 1em;
-  max-width: 100px;
-  min-width: 60px;
   overflow: visible;
   @include backface(hidden);
 

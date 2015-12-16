@@ -13,16 +13,17 @@
   <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
   <meta itemprop="image" content="{{ product.featured_image.src | img_url: 'grande' }}">
 
-  <div class="grid">
-    <div class="grid-item text-center item-product-title">
-      {% if collection.handle %}
-        <a href="{{ collection.url }}" class="h3 collection-title" item-prop="collection">{{ collection.title }}</a>
-      {% endif %}
-      <h1 itemprop="name">{{ product.title }}</h1>
-      {% if settings.product_vendor_enable %}
-        <h2 class="product-meta" itemprop="brand">{{ product.vendor }}</h2>
-      {% endif %}
-    </div>
+  <div class="text-center item-product-title">
+    {% if collection.handle %}
+      <a href="{{ collection.url }}" class="h3 collection-title" item-prop="collection">{{ collection.title }}</a>
+    {% endif %}
+    <h1 itemprop="name">{{ product.title }}</h1>
+    {% if settings.product_vendor_enable %}
+      <h2 class="product-meta" itemprop="brand">{{ product.vendor }}</h2>
+    {% endif %}
+  </div>
+
+  <div class="grid main-content" id="product-section">
 
     <div class="grid-item medium--seven-twelfths large--seven-twelfths item-product-photo">
       <div class="product-photo-container" id="productPhoto">
@@ -213,13 +214,12 @@
 
             {% comment %}
 
-            PRODUCT QUANTITY
-            
+            PRODUCT DESCRIPTION================================================
+
             {% endcomment %}
 
-            <div class="product-single__quantity">
-              <label for="Quantity" class="product-single__quantity-label js-quantity-selector">{{ 'products.product.quantity' | t }}</label>
-              <input type="number" hidden="hidden" id="Quantity" name="quantity" value="1" min="1" class="js-quantity-selector">
+            <div class="product-single__description rte" itemprop="description">
+              {{ product.description }}
             </div>
 
             {% comment %}
@@ -262,6 +262,17 @@
                 <span id="AddToCartText">{{ 'products.product.add_to_cart' | t }}</span>
               </button>
             </div>
+
+            {% comment %}
+
+            PRODUCT QUANTITY
+            
+            {% endcomment %}
+
+            <div class="product-single__quantity">
+              <label for="Quantity" class="product-single__quantity-label js-quantity-selector">{{ 'products.product.quantity' | t }}</label>
+              <input type="number" hidden="hidden" id="Quantity" name="quantity" value="1" min="1" class="js-quantity-selector">
+            </div>
           </form>
 
         </div>
@@ -271,21 +282,12 @@
         SOCIAL SHARING ===================================
           {% include 'social-sharing' %}
         {% endcomment %}
-        {% comment %}
-
-        PRODUCT DESCRIPTION================================================
-
-        {% endcomment %}
-
-        <div class="product-single__description rte" itemprop="description">
-          {{ product.description }}
-        </div>
 
         <div id="product-single__offers" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
           {% comment %}
             Optionally show the 'compare at' or original price of the product.
           {% endcomment %}
-      </div>
+        </div>
       </div>
     </div>
   </div>

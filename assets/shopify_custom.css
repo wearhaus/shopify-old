@@ -145,6 +145,21 @@
 	overflow: auto;
 }
 
+#product-section {
+    padding-top: 2em;
+    padding-bottom: 2em;
+	background-color: #ebebeb;
+}
+
+.item-product-photo {
+    background-color: white;
+    padding: 2em;
+}
+
+input.js--num {
+	background-color: white !important;
+}
+
 .color-picker-picture-black-arc, .color-picker-picture-white-arc {
 	position: absolute;
 }
@@ -198,7 +213,7 @@
 		}
 
 	.description_section_text_inner:before { /* slanted corner */
-		border-color: #333 #fff;
+		border-color: transparent #fff;
 		border-style: solid;
 		border-width: 50px 50px 0px 0px;
 		bottom: 0;
@@ -247,11 +262,12 @@
 
 .product-single__add-to-cart {
 	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 .rte img { /* customize what's in the box css */
 	height: auto;
-	width: 100%;
+	width: 85%;
 }
 
 .rte p {
@@ -268,7 +284,7 @@
 }
 
 .product-single__price {
-	font-weight: 500;
+	font-weight: 900;
 	font-size: 24px;
 }
 
@@ -329,10 +345,11 @@
 }
 
 .wrapper .main-content {
-	margin-top: 40px;
+	padding-top: 40px;
+	margin-top: 0px;
 }
 
-main > div {
+.main-content {
     padding-left: calc(100% - 1100px);
     padding-right: calc(100% - 1100px);
 }
@@ -452,7 +469,7 @@ main > div {
 
 #techspec_section {
 	background-color: #333;
-	height: 544px;
+	height: 564px;
 	margin-bottom: 15px;
 }
 
@@ -487,6 +504,16 @@ main > div {
 
 
 /* MEDIA QUERIES */
+@media (min-width: 1400px) { /* large tvs/screens */
+	.main-content {
+	    padding-left: 25%;
+	    padding-right: 25%;
+	}
+	.item-product-title {
+		padding: 5em 25%;
+	}
+}
+
 @media (max-width: 1024px) { /* ipad landscape */
 
 	#color-picker {
@@ -498,15 +525,17 @@ main > div {
 		padding-top: 40px;
 		width: 90%;
 	}
-
 }
 
 @media (max-width: 968px) {
 
 	.description_section_text {
 		height: 45%;
-		overflow: hidden;
 		width: 100%;
+	}
+
+	#product-section {
+		padding: 2em 0;
 	}
 
 	.description_section_text_inner, #techspec_section_text_inner {
@@ -584,7 +613,8 @@ main > div {
 	}
 
 	.wrapper .main-content {
-		margin-top: 10px;
+		margin-top: 0;
+	    padding: 40px 1em;
 	}
 
 	#color-picker {
@@ -729,11 +759,6 @@ main > div {
 
 	.techspec-arc-diagram, .techspec-frequency-diagram {
 		width: 100%;
-	}
-
-	.wrapper .main-content {
-		margin-top: 20px;
-		padding: 0;
 	}
 
 	#color-picker {

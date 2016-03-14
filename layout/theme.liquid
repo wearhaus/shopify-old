@@ -1,90 +1,46 @@
 <!doctype html>
-<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!--[if IE 9 ]><html class="ie9 no-js"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if IE 9]> <html class="ie9 supports-no-js" lang="{{ shop.locale }}"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="supports-no-js" lang="{{ shop.locale }}"> <!--<![endif]-->
 <head>
 
-  <!-- Basic page needs ================================================== -->
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="{{ settings.color_header_bg }}">
 
-  <!-- favicon =========================================================== -->
-  <link rel="shortcut icon" href="{{ 'favicon.ico' | asset_url }}" type="image/x-icon" />
+  {% if settings.favicon_enable %}
+    <link rel="shortcut icon" href="{{ 'favicon.png' | asset_url }}" type="image/png" />
+  {% endif %}
 
-
-  <!-- Title and description ================================================== -->
+  <link rel="canonical" href="{{ canonical_url }}">
   <title>
-  {{ page_title }}{% if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; Page {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  {{ page_title }}{% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
   </title>
 
   {% if page_description %}
-  <meta name="description" content="{{ page_description | escape }}">
+    <meta name="description" content="{{ page_description | escape }}">
   {% endif %}
 
-  <!-- Product meta ================================================== -->
-  {% include 'open-graph-tags' %}
-  {% include 'twitter-card' %}
+  {% include 'social-meta-tags' %}
 
-  <!-- Helpers ================================================== -->
-  <link rel="canonical" href="{{ canonical_url }}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag }}
+  {% include 'google-fonts' %}
+
+  {{ content_for_header }}
+
+  {% if template contains 'customers' %}
+    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {% endif %}
 
 
   <!-- CSS ================================================== -->
-  {% if template contains 'index' or template contains 'product' %}
-    {{ 'owl.carousel.min.css' | asset_url | stylesheet_tag }}
-  {% endif %}
-  {{ 'timber.scss.css' | asset_url | stylesheet_tag }}
-  {{ 'bootstrap.min.css' | asset_url | stylesheet_tag }}
+  {{ 'bootstrap.css' | asset_url | stylesheet_tag }}
   {{ 'navbar.css' | asset_url | stylesheet_tag }}
-  {{ 'footer.css' | asset_url | stylesheet_tag }}
-  {{ 'shopify_custom.css' | asset_url | stylesheet_tag }}
-
-  {% if settings.cart_type == 'drawer' %}
-  <!-- Ajaxify Cart Plugin ================================================== -->
-  {{ 'ajaxify.scss.css' | asset_url | stylesheet_tag }}
-  {% endif %}
-
-  <!-- Header hook for plugins ================================================== -->
-  {{ content_for_header }}
-
-  {% include 'oldIE-js' %}
-
-  {% comment %}
-    If you store has customers disabled, you can remove the following JS file
-  {% endcomment %}
-  {% if template contains 'customers' %}
-    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
-    {{ 'customer_area.js'  | shopify_asset_url | script_tag }}
-  {% endif %}
-
-  {% comment %}
-    Theme dependent JS is loaded at the very bottom of this file for performance reasons.
-    However, jQuery is included here so that it can be used inside the templates, e.g. in product.liquid.
-  {% endcomment %}
-  {{ '//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js' | script_tag }}
-  {{ 'modernizr.min.js' | asset_url | script_tag }}
-  {% if template contains 'index' or template contains 'product' %}
-    {{ 'owl.carousel.min.js' | asset_url | script_tag }}
-  {% endif %}
-
-  <!-- Custom Lato Font ======================================= -->
-  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
 
 </head>
 
-{% comment %}
-  Add the page template as a class for easy page or template specific styling.
-{% endcomment %}
-<body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}{% if settings.home_section_1 == 'slider' and template == 'index' %}attached-slider {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}" >
-
-
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    {% include 'site-nav' %}
-  </nav>
-  <hr class="visible--small hr--header">
+<body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}" >
+    {% include 'navbar' %}
   <header class="site-header" role="banner">
       <div class="wrapper">
         <div class="grid--full">
@@ -102,142 +58,280 @@
         </div>
       </div>
   </header>
+  
 
-
-  <main class="wrapper" role="main">
-
-    {{ content_for_layout }}
-
-  </main>
-
-  {% assign index = 0 %}
-
-   {% if settings.footer_quicklinks_enable %}{% assign index = index | plus: 1 %}{% endif %}
-   {% if settings.footer_social_enable %}{% assign index = index | plus: 1 %}{% endif %}
-   {% if settings.footer_custom_enable %}{% assign index = index | plus: 1 %}{% endif %}
-   {% if settings.footer_newsletter_enable %}{% assign index = index | plus: 1 %}{% endif %}
-
-  {% case index %}
-    {% when 1 %}
-      {% assign footer_item_width = 'medium--one-half large--one-half push--medium--one-quarter push--large--one-quarter text-center' %}
-    {% when 2 %}
-      {% assign footer_item_width = 'medium--one-half large--one-third push--large--one-sixth' %}
-    {% when 3 %}
-      {% assign footer_item_width = 'medium--one-third large--one-quarter push--large--one-eighth' %}
-    {% when 4 %}
-      {% assign footer_item_width = 'medium--one-half large--one-quarter' %}
-  {% endcase %}
-
-  <footer class="site-footer text-center" role="contentinfo">
-    {% include 'footer' %}
-  </footer>
-
-        <!-- mailing list modal -->
-        <div class="modal fade" id="mailingListModal" tabindex="-1" role="dialog" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-body">
-                        <!-- Mailchimp embedded mailing list form -->
-                        <div id="mc_embed_signup">
-                            <!-- Begin MailChimp Signup Form -->
-                            <link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css">
-                            <style type="text/css">
-                                #mc_embed_signup{background:#fff; clear:left; font:14px Lato,sans-serif; }
-                                /* Add your own MailChimp form style overrides in your site stylesheet or in this style block.
-                                   We recommend moving this block and the preceding CSS link to the HEAD of your HTML file. */
-                            </style>
-                            <div id="mc_embed_signup">
-                            <form action="//wearhaus.us8.list-manage.com/subscribe/post?u=cb896efdc02672d15109af76b&amp;id=6a705d143f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                               <div id="mc_embed_signup_scroll">
-                                <h2>SUBSCRIBE TO OUR MAILING LIST</h2>
-                            <div class="indicates-required"><span class="asterisk">*</span> indicates required</div>
-                            <div class="mc-field-group">
-                                <label for="mce-EMAIL">Email Address  <span class="asterisk">*</span>
-                            </label>
-                                <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-                            </div>
-                            <div class="mc-field-group">
-                                <label for="mce-FNAME">First Name </label>
-                                <input type="text" value="" name="FNAME" class="" id="mce-FNAME">
-                            </div>
-                            <div class="mc-field-group">
-                                <label for="mce-LNAME">Last Name </label>
-                                <input type="text" value="" name="LNAME" class="" id="mce-LNAME">
-                            </div>
-                                <div id="mce-responses" class="clear">
-                                    <div class="response" id="mce-error-response" style="display:none"></div>
-                                    <div class="response" id="mce-success-response" style="display:none"></div>
-                                </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-                               <div style="position: absolute; left: -5000px;"><input type="text" name="b_cb896efdc02672d15109af76b_6a705d143f" tabindex="-1" value=""></div>
-                               <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-                               </div>
-                            </form>
-                        </div>
-                  </div>
-                </div>
-              </div>
+  <div id="PageContainer" class="page-container is-moved-by-drawer">
+    {% if settings.promo_bar_enable and settings.promo_bar_text != blank %}
+      <div id="NotificationPromo" class="notification notification--promo">
+        <div class="page-width notification__inner {% if settings.promo_bar_link != blank %} notification__inner--has-link{% endif %}">
+          {% if settings.promo_bar_link != blank %}
+            <a href="{{ settings.promo_bar_link }}" class="notification__link">
+              <span class="notification__message">{{ settings.promo_bar_text }}</span>
+            </a>
+          {% else %}
+            <span class="notification__message">{{ settings.promo_bar_text }}</span>
+          {% endif %}
+          <button type="button" class="text-link notification__close" id="NotificationPromoClose">
+            {% include 'icon-close' %}
+            <span class="icon__fallback-text">{{ 'cart.general.close_notification' | t }}</span>
+          </button>
         </div>
+      </div>
+    {% endif %}
 
+    <main class="main-content {% if settings.hero_enable and template == 'index' %} main-content--flush{% endif %}" id="MainContent" role="main">
+      <div class="page-width">
+        {{ content_for_layout }}
+      </div>
+    </main>
 
-  {% comment %}
-    Google Analytics for Wearhaus Shopify page
-  {% endcomment %}
+    <footer class="site-footer" role="contentinfo">
+      <div class="page-width">
+        <div class="grid grid--rev">
 
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+          <div class="grid__item large-up--two-fifths site-footer__section">
+            {% if settings.footer_newsletter_enable %}
+              <h4 class="site-footer__section-title h1">{{ 'general.newsletter_form.newsletter_heading' | t }}</h4>
+              {% comment %}
 
-    ga('create', 'UA-65217708-1', 'auto');
-    ga('send', 'pageview');
+                MailChimp is the go-to newsletter service for Shopify.
+                Use the link below to find your MailChimp "form action"
+                and insert it in your site settings.
 
-  </script>
+                If the form action URL is not set in the theme settings,
+                it will fallback to a customer form so you can still capture the email.
 
+                MailChimp newsletter integration and requirement:
+                 - http://docs.shopify.com/support/configuration/store-customization/where-do-i-get-my-mailchimp-form-action
 
-  {% comment %}
-    An (almost) empty JS file for you to place your code
-  {% endcomment %}
-  {{ 'shop.js' | asset_url | script_tag }}
-  {{ 'bootstrap.min.js' | asset_url | script_tag }}
+              {% endcomment %}
+              {% if settings.newsletter_form_action != blank %}
+                <form action="{{ settings.newsletter_form_action }}" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" class="form-vertical">
+                  <label for="NewsletterEmail" class="site-footer__newsletter-label">{{ 'general.newsletter_form.newsletter_label' | t }}</label>
+                  <div class="input-group">
+                    <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_placeholder' | t }}" name="EMAIL" id="NewsletterEmail" class="input-group__field site-footer__newsletter-input" autocorrect="off" autocapitalize="off">
+                    <div class="input-group__btn">
+                      <button type="submit" class="btn btn--narrow" name="subscribe" id="Subscribe">
+                        {% include 'icon-arrow-right' %}
+                        <span class="icon__fallback-text">{{ 'general.newsletter_form.submit' | t }}</span>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              {% else %}
+                <div class="form-vertical">
+                  {% form 'customer' %}
+                    {{ form.errors | default_errors }}
+                    {% if form.posted_successfully? %}
+                      <p class="form-success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+                    {% else %}
+                      <input type="hidden" name="contact[tags]" value="newsletter">
+                      <label for="NewsletterEmail" class="site-footer__newsletter-label">{{ 'general.newsletter_form.newsletter_label' | t }}</label>
+                      <div class="input-group">
+                        <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_placeholder' | t }}" name="contact[email]" id="NewsletterEmail" class="input-group__field site-footer__newsletter-input" autocorrect="off" autocapitalize="off">
+                        <div class="input-group__btn">
+                          <button type="submit" class="btn btn--narrow" name="commit" id="Subscribe">
+                            {% include 'icon-arrow-right' %}
+                            <span class="icon__fallback-text">{{ 'general.newsletter_form.submit' | t }}</span>
+                          </button>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endform %}
+                </div>
+              {% endif %}
 
-  {% comment %}
-    <!-- Wearhaus Zendesk Widget script -->
+            {% endif %}
+
+            <div class="site-footer__subsection">
+              <ul class="list--inline social-icons">
+                {% if settings.social_facebook_link != blank %}
+                  <li>
+                    <a href="{{ settings.social_facebook_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Facebook' }}">
+                      {% include 'icon-facebook' %}
+                      <span class="icon__fallback-text">Facebook</span>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if settings.social_twitter_link != blank %}
+                  <li>
+                    <a href="{{ settings.social_twitter_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Twitter' }}">
+                      {% include 'icon-twitter' %}
+                      <span class="icon__fallback-text">Twitter</span>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if settings.social_pinterest_link != blank %}
+                  <li>
+                    <a href="{{ settings.social_pinterest_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Pinterest' }}">
+                      {% include 'icon-pinterest' %}
+                      <span class="icon__fallback-text">Pinterest</span>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if settings.social_instagram_link != blank %}
+                  <li>
+                    <a href="{{ settings.social_instagram_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Instagram' }}">
+                      {% include 'icon-instagram' %}
+                      <span class="icon__fallback-text">Instagram</span>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if settings.social_google_plus_link != blank %}
+                  <li>
+                    <a href="{{ settings.social_google_plus_link }}" rel="publisher" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Google Plus' }}">
+                      {% include 'icon-google-plus' %}
+                      <span class="icon__fallback-text">Google Plus</span>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if settings.social_tumblr_link != blank %}
+                  <li>
+                    <a href="{{ settings.social_tumblr_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Tumblr' }}">
+                      {% include 'icon-tumblr' %}
+                      <span class="icon__fallback-text">Tumblr</span>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if settings.social_youtube_link != blank %}
+                  <li>
+                    <a href="{{ settings.social_youtube_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'YouTube' }}">
+                      {% include 'icon-youtube' %}
+                      <span class="icon__fallback-text">YouTube</span>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if settings.social_vimeo_link != blank %}
+                  <li>
+                    <a href="{{ settings.social_vimeo_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Vimeo' }}">
+                      {% include 'icon-vimeo' %}
+                      <span class="icon__fallback-text">Vimeo</span>
+                    </a>
+                  </li>
+                {% endif %}
+                {% if settings.social_fancy_link != blank %}
+                  <li>
+                    <a href="{{ settings.social_fancy_link }}" title="{{ 'layout.footer.social_platform' | t: name: shop.name, platform: 'Fancy' }}">
+                      {% include 'icon-fancy' %}
+                      <span class="icon__fallback-text">Fancy</span>
+                    </a>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid__item large-up--three-fifths site-footer__section">
+            <div class="grid">
+              {% if settings.footer_page_content != blank %}
+                <div class="grid__item medium-up--one-third site-footer__subsection">
+                  <h4 class="h1 site-footer__section-title">{{ pages[settings.footer_page_content].title }}</h4>
+                  {{ pages[settings.footer_page_content].content }}
+                </div>
+              {% endif %}
+
+              {% if linklists[settings.footer_linklist_1].links.size > 0 %}
+                <div class="grid__item medium-up--one-third site-footer__subsection">
+                  <h4 class="h1 site-footer__section-title">{{ linklists[settings.footer_linklist_1].title }}</h4>
+                  <ul class="site-footer__list">
+                    {% for link in linklists[settings.footer_linklist_1].links %}
+                      <li class="site-footer__list-item"><a href="{{ link.url }}">{{ link.title }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+
+              {% if linklists[settings.footer_linklist_2].links.size > 0 %}
+                <div class="grid__item medium-up--one-third site-footer__subsection">
+                  <h4 class="h1 site-footer__section-title">{{ linklists[settings.footer_linklist_2].title }}</h4>
+                  <ul class="site-footer__list">
+                    {% for link in linklists[settings.footer_linklist_2].links %}
+                      <li class="site-footer__list-item"><a href="{{ link.url }}">{{ link.title }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="site-footer__copyright">
+        <div class="page-width">
+          <div class="grid medium-up--grid--table">
+            <div class="grid__item medium-up--one-half">
+              <small>&copy; {{ 'now' | date: "%Y" }}, {{ shop.name | link_to: '/' }}. {{ powered_by_link }}</small>
+            </div>
+            <div class="grid__item medium-up--one-half medium-up--text-right">
+              {% unless shop.enabled_payment_types == empty %}
+                <ul class="list--inline payment-icons">
+                  {% for type in shop.enabled_payment_types %}
+                    <li>
+                      {% assign icon_name = type | prepend: 'icon-' %}
+                      {% include icon_name %}
+                      <span class="icon__fallback-text">{{type | replace: '_',' '}}</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endunless %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  {{ 'theme.js' | asset_url | script_tag }}
+
+  {% if true or template contains 'cart' %}
+    {{ 'option_selection.js' | shopify_asset_url | script_tag }}
     <script>
-        /*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(c){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var o=this.createElement("script");n&&(this.domain=n),o.id="js-iframe-async",o.src=e,this.t=+new Date,this.zendeskHost=t,this.zEQueue=a,this.body.appendChild(o)},o.write('<body onload="document._l();">'),o.close()}("https://assets.zendesk.com/embeddable_framework/main.js","wearhaus.zendesk.com");/*]]>*/
+    theme.moneyFormat = {{ shop.money_format | json }};
     </script>
-    <!-- End of wearhaus Zendesk Widget script -->
-    {% endcomment %}
+  {% endif %}
 
-  {% comment %}
-    Ajaxify your cart with this plugin. Adding a product will reveal a drawer, modal, or confirmation button. Enabled by default in theme settings.
+  {% if true %}
+    <script>
+      // Pre-loading product images, to avoid a lag when a thumbnail is clicked, or
+      // when a variant is selected that has a variant image.
+      Shopify.Image.preload({{ product.images | json }}, 'large');
 
-    Ajaxify Cart Documentation:
-      - https://shopify.github.io/Timber/#ajax-cart
-  {% endcomment %}
-  {% if settings.cart_type == 'drawer' %}
-  {{ 'handlebars.min.js' | asset_url | script_tag }}
-  {% include 'ajax-cart-template' %}
-  {{ 'ajaxify.js' | asset_url | script_tag }}
-  <script>
-  jQuery(function($) {
-    ajaxifyShopify.init({
-      method: 'Drawer',
-      wrapperClass: 'wrapper',
-      formSelector: '#AddToCartForm',
-      addToCartSelector: '#addToCart',
-      cartCountSelector: '.cart-count',
-      cartCostSelector: '#cartCost',
-      toggleCartButton: '#cartToggle',
-      useCartTemplate: true, // When true, it'll use cart.liquid template. When false, it'll use ajax-cart-template.liquid.
-      btnClass: 'btn',
-      moneyFormat: {{ shop.money_format | json }},
-      enableQtySelectors: true,
-      prependDrawerTo: 'body',
-      onToggleCallback: timber.cartToggleCallback
-    });
-  });
+      // Set a global variable for theme.js to use on product single init
+      theme.productSingleObject = {{ product | json }};
+      {% if settings.product_stock_enable %}
+        {% for variant in product.variants %}
+          theme.productSingleObject.variants[{{ forloop.index0}}].incoming = {{ variant.incoming | default: false }};
+          theme.productSingleObject.variants[{{ forloop.index0}}].next_incoming_date = {{ variant.next_incoming_date | date: format: 'month_day_year' | json }};
+        {% endfor %}
+      {% endif %}
+    </script>
+  {% endif %}
+
+  <script id="QuantityTemplate" type="text/template">
+    {% raw %}
+      <div class="js-qty">
+        <input type="text" value="{{ value }}" id="{{ id }}" name="{{ name }}" pattern="[0-9]*" data-line="{{ line }}" class="js-qty__input" aria-live="polite">
+        <button type="button" class="js-qty__adjust js-qty__adjust--minus" aria-label="{% endraw %}{{ 'cart.label.decrease_quantity' | t }}{% raw %}">
+          {% endraw %}{% include 'icon-minus' %}{% raw %}
+          <span class="icon__fallback-text">−</span>
+        </button>
+        <button type="button" class="js-qty__adjust js-qty__adjust--plus" aria-label="{% endraw %}{{ 'cart.label.increase_quantity' | t }}{% raw %}">
+          {% endraw %}{% include 'icon-plus' %}{% raw %}
+          <span class="icon__fallback-text">+</span>
+        </button>
+      </div>
+    {% endraw %}
   </script>
+
+  {% if true %}
+    <div id="ProductModal" class="modal">
+      <div class="modal__inner">
+        <img src="" id="ProductZoomImg" class="product-modal__image">
+      </div>
+      <button type="button" class="modal__close js-modal-close text-link">
+        {% include 'icon-close' %}
+        <span class="icon__fallback-text">{{ 'general.accessibility.close_modal' | t | json }}</span>
+      </button>
+    </div>
   {% endif %}
 </body>
 </html>

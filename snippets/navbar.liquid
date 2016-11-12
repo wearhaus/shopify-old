@@ -1,5 +1,5 @@
     <!-- Navigation -->
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top" style="background-color: #2b2b2b">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -9,12 +9,6 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">{{ 'logo_white_transparent_high_res.png' | asset_url | img_tag }}</a>
-                <div id="navbar-order-now-link-mobile-container">
-                    <a href="http://store.wearhaus.com" id="order_now_link_mobile">
-                        Pre-order Now
-                    </a>
-                </div>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -24,26 +18,26 @@
                         <a href="#page-top"></a>
                     </li>
                     <li class="page-scroll">
-                        <a href="/ourstory">Our Story</a>
+                        <a href="/ourstory">About</a>
                     </li>
                     <li class="page-scroll">
                         <a href="http://blog.wearhaus.com">Blog</a>
                     </li>
                     <li class="page-scroll">
-                        <a href="https://wearhaus.zendesk.com/hc/en-us" target="_blank">Support</a>
+                        <a href="http://jobs.wearhaus.com">Jobs</a>
                     </li>
                     <li class="page-scroll">
                         <a href="/updater">Updater</a>
                     </li>
-                    <li class="page-scroll" id="order_now">
-                        <a href="http://store.wearhaus.com" id="order_now_link">Pre-order Now</a>
+                    <li class="page-scroll">
+                        <a href="https://wearhaus.zendesk.com/hc/en-us" target="_blank">Support</a>
                     </li>
                   	<li>
-                      	<a href="/cart" class="site-header__link site-header__cart">
+                        <a href="/cart" class="site-header__link site-header__cart">
                 {% include 'icon-cart' %}
                 <span class="icon__fallback-text">{{ 'layout.cart.title' | t }}</span>
                 <span class="site-header__cart-indicator {% if cart.item_count == 0 %}hide{% endif %}"></span>
-              </a>
+                        </a>
                     </li>
                 </ul>
             </div>
